@@ -83,6 +83,7 @@ class ModelAccountCustomer extends Model {
 				}
 			}
 		}
+        return $customer_id;
 	}
 
 	public function editCustomer($data) {
