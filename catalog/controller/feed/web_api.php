@@ -355,7 +355,7 @@ class ControllerFeedWebApi extends Controller {
      */
     public function addCustomer() {
 
-
+        $this->load->model("account/customer");
         $data['firstname'] = $this->request->get['name'];
         $data['lastname'] = "";
         $data['email'] = $this->request->get['email'];
@@ -366,16 +366,28 @@ class ControllerFeedWebApi extends Controller {
         $data['city'] = $this->request->get['city'];
         $data['postcode'] = $this->request->get['postcode'];
 
-        $data['country_id'] = getCountryId($this->request->get['country']);
-        $data['zone_id'] = getZoneId($this->request->get['state']);
+        $data['country_id'] = $this->getCountryId($this->request->get['country']);
+        $data['zone_id'] = $this->getZoneId($this->request->get['state']);
+        //Dummy fields for safe execution
+        $data['fax'] = "";
+        $data['company'] = "";
+        $data['company_id'] = "";
+        $data['tax_id'] = "";
+        $data['address_2'] = "";
+        $this->model_account_customer->addCustomer($data);
 
     }
 
-    public function getCountryId($country){
+    private function getCountryId($country){
 
         $this->load->model("account/api");
         $country_details = $this->model_account_api->getCountryId($country);
         return $country_details->rows[0]['country_id'];
     }
 
+    private function getZoneId($state) {
+        $this->load->model("account/api");
+        $zone_details = $this->model_account_api->getZoneId($state);
+        return $zone_details->rows[0]['zone_id'];
+    }
 }

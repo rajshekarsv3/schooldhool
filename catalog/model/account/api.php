@@ -16,6 +16,11 @@ class ModelAccountApi extends Model {
         $country_id_result = $this->db->query($country_id_query);
         return $country_id_result;
     }
+    public function getZoneId($state) {
+        $zone_id_query = "SELECT * FROM ". DB_PREFIX ."zone WHERE name LIKE '$state'";
+        $zone_id_result = $this->db->query($zone_id_query);
+        return $zone_id_result;
+    }
 
 }
 ?>
