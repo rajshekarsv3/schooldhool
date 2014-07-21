@@ -22,5 +22,12 @@ class ModelAccountApi extends Model {
         return $zone_id_result;
     }
 
+    public function addTransaction($customer_id,$amount) {
+
+        $transaction_query = "INSERT INTO ". DB_PREFIX ."customer_transaction (`customer_transaction_id`, `customer_id`, `order_id`, `description`, `amount`, `date_added`) VALUES (NULL, '$customer_id', '0', 'adding voucher from school admin panel', '$amount', NOW())";
+        $this->db->query($transaction_query);
+        return;
+    }
+
 }
 ?>

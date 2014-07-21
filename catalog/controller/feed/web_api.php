@@ -390,4 +390,16 @@ class ControllerFeedWebApi extends Controller {
         $zone_details = $this->model_account_api->getZoneId($state);
         return $zone_details->rows[0]['zone_id'];
     }
+    /*
+     * To add voucher to a customer
+     */
+    public function addVoucher() {
+
+        $this->load->model("account/api");
+        $customer_id = $this->request->get['customer_id'];
+        $amount = $this->request->get['amount'];
+        $this->model_account_api->addTransaction($customer_id,$amount);
+        return;
+
+    }
 }
