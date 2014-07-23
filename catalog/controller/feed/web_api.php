@@ -402,4 +402,46 @@ class ControllerFeedWebApi extends Controller {
         return;
 
     }
+    /*
+     * To add products to cart in batch
+     */
+    public function addToCart(){
+        $cart = array();
+        $cart_products = $this->request->post['product'];
+
+        foreach($cart_products as $cart_product){
+            $cart = $this->emulateCart($cart_product['id'],$cart_product['quantity'],array(),'',$cart);
+        }
+        print_r($cart);
+        $this->load->model("account/api");
+        $this->model_account_api->addCartData($cart,$this->request->post['user_id']);
+    }
+    /*
+     * Internal function to emulate the function cart in session so that we can save in the database
+     */
+    private function emulateCart($product_id, $qty = 1, $option, $profile_id = '',$cart = array()) {
+
+        $key = (int)$product_id . ':';
+
+        if ($option) {
+            $key .= base64_encode(serialize($option)) . ':';
+        }  else {
+            $key .= ':';
+        }
+
+        if ($profile_id) {
+            $key .= (int)$profile_id;
+        }
+
+        if ((int)$qty && ((int)$qty > 0)) {
+            if (!isset($cart[$key])) {
+                $cart[$key] = (int)$qty;
+            } else {
+                $cart[$key] += (int)$qty;
+            }
+        }
+        return $cart;
+
+    }
+
 }

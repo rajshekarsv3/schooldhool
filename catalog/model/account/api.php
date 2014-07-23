@@ -28,6 +28,8 @@ class ModelAccountApi extends Model {
         $this->db->query($transaction_query);
         return;
     }
-
+    public function addCartData($cart_data,$user_id) {
+        $this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($cart_data) ? serialize($cart_data) : '') . "' WHERE customer_id = '" . (int)$user_id . "'");
+    }
 }
 ?>
