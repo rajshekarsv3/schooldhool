@@ -375,7 +375,7 @@ class ControllerFeedWebApi extends Controller {
         $data['tax_id'] = "";
         $data['address_2'] = "";
         $customer_id = $this->model_account_customer->addCustomer($data);
-        return $customer_id;
+        echo $customer_id;
     }
 
     private function getCountryId($country){
