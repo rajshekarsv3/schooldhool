@@ -356,15 +356,15 @@ class ControllerFeedWebApi extends Controller {
     public function addCustomer() {
 
         $this->load->model("account/customer");
-        $data['firstname'] = $this->request->get['name'];
+        $data['firstname'] = ($this->request->get['name'])?$this->request->get['name']:"";
         $data['lastname'] = "";
-        $data['email'] = $this->request->get['email'];
-        $data['telephone'] = $this->request->get['telephone'];
-        $data['password'] = $this->request->get['password'];
+        $data['email'] = $this->request->get['email']?$this->request->get['email']:"";
+        $data['telephone'] = $this->request->get['telephone']?$this->request->get['telephone']:"";
+        $data['password'] = $this->request->get['password']?$this->request->get['password']:"";
 
-        $data['address_1'] = $this->request->get['school_address'];
-        $data['city'] = $this->request->get['city'];
-        $data['postcode'] = $this->request->get['postcode'];
+        $data['address_1'] = $this->request->get['school_address']?$this->request->get['school_address']:"";
+        $data['city'] = $this->request->get['city']?$this->request->get['city']:"";
+        $data['postcode'] = $this->request->get['postcode']?$this->request->get['postcode']:"";
 
         $data['country_id'] = $this->getCountryId($this->request->get['country']);
         $data['zone_id'] = $this->getZoneId($this->request->get['state']);
