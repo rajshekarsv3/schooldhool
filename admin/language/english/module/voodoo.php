@@ -1,0 +1,32 @@
+<?php
+$_['heading_title']    = 'Voodoo SMS';
+$_['text_module']     = 'Modules';
+$_['text_success']     = 'Success: You have modified VoodooSMS API!';
+$_['text_voodoo_balance']   = 'Enter Username and Password';
+$_['text_start_voodoo']   = 'Click <a href="%s">here</a> to start sending SMS with Voodoo.';
+$_['text_contact_example']   = 'Country Code + Phone Number (e.g. 60123456789 for Malaysia)';
+$_['text_admin_alert_customer_register']   = 'Alert admin when customer registers an account';
+$_['text_admin_alert_customer_checkout']   = 'Alert admin when customer checkouts';
+$_['text_admin_alert_order_status'] = 'Alert admin when order status changes';
+$_['text_customer_alert_ckeckout']   = 'Alert customer when customer successfully checkouts';
+$_['text_customer_alert_order_status']   = 'Alert customer when order status is updated';
+$_['text_admin_alert_additional_settings']   = 'Additional Alert Settings: ';
+$_['text_admin_alert_include_items']    = 'Include ordered items in SMS';
+$_['text_admin_alert_allow_long_message']    = 'Allow long message if message length exceeds 159 characters for ASCII or 69 for Unicode';
+$_['button_send_sms']   = 'Send SMS';
+$_['entry_voodoo_balance']   = 'Available Credits:';
+$_['entry_voodoo_username']    = 'API Username:';
+$_['entry_voodoo_password']    = 'API Password:';
+$_['entry_voodoo_admin_contact']    = 'Admin Contact:';
+$_['entry_voodoo_message_type']    = 'Message Type:';
+$_['entry_voodoo_admin_alert']    = 'Admin Alert:';
+$_['entry_voodoo_customer_alert']    = 'Customer Alert:';
+$_['order_enabled'] = 'Send SMS';
+$_['order_sender'] = 'Sender ID (Max 11 Characters)';
+$_['order_status_sender'] = 'Sender ID (Max 11 Characters)';
+$_['order_message'] = 'Message (Max 160 Characters)';
+$_['order_link_your_account'] = 'Link your account';
+$_['notify_admin'] = 'Notify admin';
+$_['admin_telephone'] = 'Admin telephone';
+$_['error_permission'] = 'Warning: You do not have permission to modify module Voodoo!';
+?>

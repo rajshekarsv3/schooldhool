@@ -1,0 +1,109 @@
+<modification>
+    <id>Voodoo</id>
+    <version>1.5.1</version>
+    <vqmver>2.X</vqmver>
+    <author>TGM</author>
+    <file name="system/startup.php">
+        <operation error="log">
+            <search position="after"><![CDATA[require_once(DIR_SYSTEM . 'library/template.php');]]></search>
+            <add><![CDATA[require_once(DIR_SYSTEM . 'library/voodoo.php');]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation error="log">
+            <search position="after"><![CDATA[$language->load('mail/order');]]></search>
+            <add><![CDATA[
+                if ($this->config->get('order_status_enabled') == "1") {
+                    $voodoo = new Voodoo();
+                    $voodoo->setApi($this->config->get('voodoo_username'),$this->config->get('voodoo_password'));
+                    $order_status_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$data['order_status_id'] . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
+                    if(isset($order_status_query->row['name'])){
+                        $message = $this->config->get('message_of_order_status');
+                        $accurate = array($order_id, $order_status_query->row['name'],$order_info['customer']);
+                    }
+                    else{
+                        $message = "Status of you order # {{order_id}} has been changed Thanks";
+                        $accurate = array($order_id,'',$order_info['customer']);
+                    }
+                    $message = $voodoo->getMessage($accurate,$message);
+                    $voodoo->send($this->config->get('order_status_sender_number'),$order_info['telephone'],1,$message,$this->db);
+                    if($this->config->get('notify_admin_value') == "1"){
+                        if($this->config->get('admin_alert_order_status') == "1"){
+                            if(isset($order_status_query->row['name'])){
+                                $message = "Your customer {{customer}}'s order status has been changed to {{order_status}} of order id {{order_id}}";
+                                $accurate = array($order_id, $order_status_query->row['name'],$order_info['customer']);
+                            }
+                            else{
+                                $message = "Your customer {{customer}}'s order status has been changed of order id {{order_id}}";
+                                $accurate = array($order_id,'',$order_info['customer']);
+                            }
+                            $message = $voodoo->getMessage($accurate,$message);
+                            $destination = $this->config->get('admin_telephone_value');
+                            $voodoo->send($order_info['store_name'],$destination,1,$message,$this->db);
+                        }
+                    }
+                }
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/account/customer.php">
+        <operation error="log">
+            <search position="after"><![CDATA[// Send to main admin email if new account email is enabled]]></search>
+            <add><![CDATA[
+			if ($this->config->get('voodoo_admin_alert_customer_register') == "1") {
+			    $voodoo = new Voodoo();
+				$voodoo->setApi($this->config->get('voodoo_username'),$this->config->get('voodoo_password'));
+			    $message = "A new customer {{customer}} has created an account";
+				$destination = $this->config->get('admin_telephone_value');
+                $voodoo->send('OPENCART',$destination,1,$message,$this->db);
+                $originator = $order_info['store_name'];
+                $message = "hello {{customer}} Thank You for signing up";
+				$accurate = array('','',$data['firstname']);
+                $message = $voodoo->getMessage($accurate,$admin_message);
+                $voodoo->send($originator,$data['telephone'],1,$message,$this->db);
+			}
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/checkout/order.php">
+        <operation error="log">
+            <search position="after"><![CDATA[// Admin Alert Mail]]></search>
+            <add><![CDATA[
+			if($this->config->get('notify_admin_value') == "1"){
+			    if($this->config->get('voodoo_admin_alert_customer_checkout') == "1"){
+			        $voodoo = new Voodoo();
+			        $voodoo->setApi($this->config->get('voodoo_username'),$this->config->get('voodoo_password'));
+			        $destination = $this->config->get('admin_telephone_value');
+			        $originator = $order_info['store_name'];
+			        $message = "{{firstname}} has placed an order {{order_id}} amount {{total}} {{currency_code}}";
+			        $accurate = array($order_info['order_id'],$order_info['firstname'],$order_info['email'],$order_info['total'],$order_info['currency_code'],$order_info['invoice_prefix']);
+                    $message = $voodoo->getMessageForCheckout($accurate,$message);
+                    $voodoo->send($originator,$destination,1,$message,$this->db);
+                }
+            }
+			]]></add>
+        </operation>
+        <operation error="log">
+            <search position="before"><![CDATA[// Admin Alert Mail]]></search>
+            <add><![CDATA[
+			    if($this->config->get('order_enabled_value') == "1"){
+			        $voodoo = new Voodoo();
+			        $voodoo->setApi($this->config->get('voodoo_username'),$this->config->get('voodoo_password'));
+			        $originator = $this->config->get('order_sender_number');
+			        $message = $this->config->get('order_message_value');
+			        $accurate = array($order_info['order_id'],$order_info['firstname'],$order_info['email'],$order_info['total'],$order_info['currency_code'],$order_info['invoice_prefix']);
+                    $message = $voodoo->getMessageForCheckout($accurate,$message);
+                    if(isset($order_info['telephone'])){
+                        $destination = $order_info['telephone'];
+                        $voodoo->send($originator,$destination,1,$message,$this->db);
+                    }
+                }
+
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
