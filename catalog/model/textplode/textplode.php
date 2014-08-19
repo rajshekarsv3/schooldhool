@@ -41,8 +41,13 @@ class ModelTextplodeTextplode extends Model {
 			if($this->config->get('textplode_from_name') != ''){
 				$from = urlencode($this->config->get('textplode_from_name'));
 			}
+            $url = "http://bulksmsservice.co.in/api/sentsms.php?username=condemo&api_password=eyyyyy33mp&to=".$to."&message=".$message."&sender=SCLCOM&priority=2";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL,$url);
 
-			$params = array(
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $strPage = curl_exec($curl);
+			/*$params = array(
 				'action' => 'send',
 				'recipients' => urlencode($to),
 				'from' => $this->config->get('textplode_from_name'),
@@ -69,8 +74,9 @@ class ModelTextplodeTextplode extends Model {
 			}else{
 				$this->logError('','Message successfully sent - Cost: ' . $response['credits_used'] . ' credits');
 			}
-
-			return $response['return_code'];
+*/
+            $this->logError('',$strPage);
+			return $strPage;
 		}else{
 			$this->logError('', 'Message tried to send, but extension is disabled');
 		}

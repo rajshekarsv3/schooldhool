@@ -191,7 +191,7 @@ class ModelTextplodeTextplode extends Model {
 		}
 
 		$this->load->model('setting/setting');
-		$params = array(
+		/*$params = array(
 			'action' => 'send',
 			'recipients' => urlencode($to),
 			'from' => $this->config->get('textplode_from_name'),
@@ -219,10 +219,18 @@ class ModelTextplodeTextplode extends Model {
 			}
 		}else{
 			$this->logError('','Message successfully sent - Cost: ' . $response['credits_used'] . ' credits');
-		}
+		}*/
+        $url = "http://bulksmsservice.co.in/api/sentsms.php?username=condemo&api_password=eyyyyy33mp&to=".$to."&message=".urlencode($message)."&sender=SCLCOM&priority=2";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL,$url);
 
-		return $response['return_code'] ;
-		return 'SUCCESS';
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $strPage = curl_exec($curl);
+
+        $this->logError('',$strPage);
+
+		//return $response['return_code'] ;
+		return $strPage;
 	}
 
 	public function getEvents(){
