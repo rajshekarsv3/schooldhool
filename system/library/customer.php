@@ -19,7 +19,7 @@ class Customer {
 		if (isset($this->session->data['customer_id'])) { 
 			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 
-			if ($customer_query->num_rows) {
+			if ($customer_query->num_rows){
 				$this->customer_id = $customer_query->row['customer_id'];
 				$this->firstname = $customer_query->row['firstname'];
 				$this->lastname = $customer_query->row['lastname'];
