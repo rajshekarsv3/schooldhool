@@ -31,5 +31,11 @@ class ModelAccountApi extends Model {
     public function addCartData($cart_data,$user_id) {
         $this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($cart_data) ? serialize($cart_data) : '') . "' WHERE customer_id = '" . (int)$user_id . "'");
     }
+
+    public function getUnmappedStoreList($exception_list) {
+        $store_query = "SELECT * FROM  ".DB_PREFIX."oc_store WHERE store_id NOT IN ( ".$exception_list." )";
+        $unmapped_store_list = $this->db->query($store_query);
+        return $unmapped_store_list;
+    }
 }
 ?>
