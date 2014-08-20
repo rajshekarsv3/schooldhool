@@ -450,7 +450,7 @@ class ControllerFeedWebApi extends Controller {
         $mapped_store_list = $this->request->get['exclude_list'];
         $this->load->model("account/api");
         $unmapped_store_array = $this->model_account_api->getUnmappedStoreList($mapped_store_list);
-        return json_encode($unmapped_store_array);
+        echo json_encode($unmapped_store_array);
     }
 
 }
