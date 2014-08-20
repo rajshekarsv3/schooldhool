@@ -446,7 +446,8 @@ class ControllerFeedWebApi extends Controller {
     /*
      * Get the list of stores which are not mapped
      */
-    public function getUnmappedStoreList($mapped_store_list) {
+    public function getUnmappedStoreList() {
+        $mapped_store_list = $this->request->get['exclude_list'];
         $this->load->model("account/api");
         $unmapped_store_array = $this->model_account_api->getUnmappedStoreList($mapped_store_list);
         return json_encode($unmapped_store_array);
