@@ -35,7 +35,7 @@ class ModelAccountApi extends Model {
     public function getUnmappedStoreList($exception_list) {
         $store_query = "SELECT * FROM  ".DB_PREFIX."store WHERE store_id NOT IN ( ".$exception_list." )";
         $unmapped_store_list = $this->db->query($store_query);
-        return $unmapped_store_list['rows'];
+        return $unmapped_store_list->rows;
     }
 }
 ?>
