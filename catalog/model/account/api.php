@@ -37,5 +37,11 @@ class ModelAccountApi extends Model {
         $unmapped_store_list = $this->db->query($store_query);
         return $unmapped_store_list->rows;
     }
+
+    public function getStoreById($store_id) {
+        $store_query = "SELECT * FROM  ".DB_PREFIX."store WHERE store_id='".$store_id."'";
+        $unmapped_store_list = $this->db->query($store_query);
+        return $unmapped_store_list->rows;
+    }
 }
 ?>

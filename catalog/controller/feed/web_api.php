@@ -452,5 +452,15 @@ class ControllerFeedWebApi extends Controller {
         $unmapped_store_array = $this->model_account_api->getUnmappedStoreList($mapped_store_list);
         echo json_encode($unmapped_store_array);
     }
+    /*
+     * Get store by id
+     */
+    public function getStoreById() {
 
+        $store_id = $this->request->get['store_id'];
+        $this->load->model("account/api");
+        $store_details = $this->model_account_api->getUnmappedStoreList($store_id);
+        echo json_encode($store_details);
+
+    }
 }
