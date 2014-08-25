@@ -459,7 +459,7 @@ class ControllerFeedWebApi extends Controller {
 
         $store_id = $this->request->get['store_id'];
         $this->load->model("account/api");
-        $store_details = $this->model_account_api->getUnmappedStoreList($store_id);
+        $store_details = $this->model_account_api->getStoreById($store_id);
         echo json_encode($store_details);
 
     }
