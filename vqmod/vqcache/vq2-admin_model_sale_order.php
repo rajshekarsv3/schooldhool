@@ -80,31 +80,6 @@ class ModelSaleOrder extends Model {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET invoice_prefix = '" . $this->db->escape($invoice_prefix) . "', store_id = '" . (int)$data['store_id'] . "', store_name = '" . $this->db->escape($store_name) . "',store_url = '" . $this->db->escape($store_url) . "', customer_id = '" . (int)$data['customer_id'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($data['payment_lastname']) . "', payment_company = '" . $this->db->escape($data['payment_company']) . "', payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "', payment_tax_id = '" . $this->db->escape($data['payment_tax_id']) . "', payment_address_1 = '" . $this->db->escape($data['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($data['payment_address_2']) . "', payment_city = '" . $this->db->escape($data['payment_city']) . "', payment_postcode = '" . $this->db->escape($data['payment_postcode']) . "', payment_country = '" . $this->db->escape($payment_country) . "', payment_country_id = '" . (int)$data['payment_country_id'] . "', payment_zone = '" . $this->db->escape($payment_zone) . "', payment_zone_id = '" . (int)$data['payment_zone_id'] . "', payment_address_format = '" . $this->db->escape($payment_address_format) . "', payment_method = '" . $this->db->escape($data['payment_method']) . "', payment_code = '" . $this->db->escape($data['payment_code']) . "', shipping_firstname = '" . $this->db->escape($data['shipping_firstname']) . "', shipping_lastname = '" . $this->db->escape($data['shipping_lastname']) . "', shipping_company = '" . $this->db->escape($data['shipping_company']) . "', shipping_address_1 = '" . $this->db->escape($data['shipping_address_1']) . "', shipping_address_2 = '" . $this->db->escape($data['shipping_address_2']) . "', shipping_city = '" . $this->db->escape($data['shipping_city']) . "', shipping_postcode = '" . $this->db->escape($data['shipping_postcode']) . "', shipping_country = '" . $this->db->escape($shipping_country) . "', shipping_country_id = '" . (int)$data['shipping_country_id'] . "', shipping_zone = '" . $this->db->escape($shipping_zone) . "', shipping_zone_id = '" . (int)$data['shipping_zone_id'] . "', shipping_address_format = '" . $this->db->escape($shipping_address_format) . "', shipping_method = '" . $this->db->escape($data['shipping_method']) . "', shipping_code = '" . $this->db->escape($data['shipping_code']) . "', comment = '" . $this->db->escape($data['comment']) . "', order_status_id = '" . (int)$data['order_status_id'] . "', affiliate_id  = '" . (int)$data['affiliate_id'] . "', language_id = '" . (int)$this->config->get('config_language_id') . "', currency_id = '" . (int)$currency_id . "', currency_code = '" . $this->db->escape($currency_code) . "', currency_value = '" . (float)$currency_value . "', date_added = NOW(), date_modified = NOW()");
 
 		$order_id = $this->db->getLastId();
-                          
-                                    if(file_exists("model/sms/hooks.php"))
-                                    {                         
-                                        require_once("model/sms/hooks.php");
-                                        $hooks = new ModelSmsHooks( $this->registry );
-                                        require_once($hooks->getLanguageDirectory());
-                                        if(isset($data['customer_id']))
-                                        {
-                                            $sms_customer_id = $data['customer_id'];
-                                        } else {
-                                            $sms_customer_id = -1;
-                                        }
-                                        if(isset($data['comment'])) 
-                                        {
-                                            $sms_message = $data['comment'];
-                                        } else {
-                                            $sms_message = "";
-                                        }
-                            
-                                        $optOut = ((isset($_SESSION["SMS_IN_CART"]))?(intval($_SESSION["SMS_IN_CART"])):(true)); 
-                            
-                                        $hooks->orderAddHook($sms_customer_id, $order_id, $sms_message, $optOut);
-                                    }
-				
-			
 
 		if (isset($data['order_product'])) {
 			foreach ($data['order_product'] as $order_product) {
@@ -218,19 +193,6 @@ class ModelSaleOrder extends Model {
 		if ($order_query->num_rows) {
 			$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 
-  
-                                    if(isset($data) && $order_query->row["order_status_id"] != $data['order_status_id'])  
-                                    {          
-                                        if(file_exists("model/sms/hooks.php"))
-                                        {                          
-                                            require_once("model/sms/hooks.php");
-                                            $hooks = new ModelSmsHooks( $this->registry );
-                                            require_once($hooks->getLanguageDirectory());
-                                            $hooks->changeOrderStatusHook($data['order_status_id'], $data['comment'], $order_id);
-                                        }
-                                    }
-				
-			
 			foreach($product_query->rows as $product) {
 				$this->db->query("UPDATE `" . DB_PREFIX . "product` SET quantity = (quantity + " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 
@@ -320,19 +282,6 @@ class ModelSaleOrder extends Model {
 		if ($order_query->num_rows) {
 			$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 
-  
-                                    if(isset($data) && $order_query->row["order_status_id"] != $data['order_status_id'])  
-                                    {          
-                                        if(file_exists("model/sms/hooks.php"))
-                                        {                          
-                                            require_once("model/sms/hooks.php");
-                                            $hooks = new ModelSmsHooks( $this->registry );
-                                            require_once($hooks->getLanguageDirectory());
-                                            $hooks->changeOrderStatusHook($data['order_status_id'], $data['comment'], $order_id);
-                                        }
-                                    }
-				
-			
 			foreach($product_query->rows as $product) {
 				$this->db->query("UPDATE `" . DB_PREFIX . "product` SET quantity = (quantity + " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 
@@ -758,18 +707,23 @@ class ModelSaleOrder extends Model {
 			}
 		}
 
-if(file_exists("model/sms/hooks.php"))
-                                    {                          
-                                        require_once("model/sms/hooks.php");
-                                        $hooks = new ModelSmsHooks( $this->registry );
-                                        require_once($hooks->getLanguageDirectory());
-                            
-                                        if($data['notifySms'] || !isset($data['notifySms']))
-                                        {
-                                            $hooks->changeOrderStatusHook($data["order_status_id"], $data["comment"], $order_id);
-                                        }
-                                    }
 		if ($data['notify']) {
+
+				
+					// VQMOD CODE //
+						$this->load->model('textplode/textplode');
+						$new_status = $this->model_textplode_textplode->getStatusNameFromId($data['order_status_id']);
+						if($this->model_textplode_textplode->getSMS($order_info['customer_id'])){
+							if($this->model_textplode_textplode->isActive($new_status)){
+								$template = $this->model_textplode_textplode->getTemplateFromStatusName($new_status);
+								if($this->model_textplode_textplode->isValidNumber($order_info['telephone'])){
+									$this->model_textplode_textplode->sendMessage($order_info['telephone'], $template['template_content']);
+								}
+							}
+						}
+					// END VQMOD //
+				
+			
 			$language = new Language($order_info['language_directory']);
 			$language->load($order_info['language_filename']);
 			$language->load('mail/order');
